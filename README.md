@@ -22,13 +22,13 @@ póki ktoś nie odgadnie hasła
 18. W przypdaku odgadnięcia hasła
 serwer wysyła informację o rezultacie gry.
 
-Zestaw komend
-start - zgłoszenie gotowości klienta
-end - koniec gry
-ok - potwierdzenie przyjęcia informacji
-other_player - informacja, że jest kolej drugiego gracza
-pass <hasło> - wysyłanie hasła przez klienta
-filled_pass <hasło z uzupełnieniami> - wysyłanie hasła z uzupełnieniami
-letter <literka> - wysłanie litery przez klienta
-info <tekst> - przesyłanie informacji o wygranej/przegranej
-i oczekiwaniu na gracza
+Zestaw komend  
+start - zgłoszenie gotowości klienta  
+end - koniec gry  
+ok - potwierdzenie przyjęcia informacji  
+other_player - informacja, że jest kolej drugiego gracza  
+pass <hasło> - wysyłanie hasła przez klienta  
+filled_pass <hasło z uzupełnieniami> - wysyłanie hasła z uzupełnieniami  
+letter <literka> - wysłanie litery przez klienta  
+info <tekst> - przesyłanie informacji o wygranej/przegranej  
+i oczekiwaniu na gracza  
