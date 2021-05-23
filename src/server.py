@@ -1,7 +1,6 @@
 import socket
 import threading
-import ssl
-from game import Game
+from src.game import Game
 
 SERVER = "127.0.0.1"
 PORT = 5001
