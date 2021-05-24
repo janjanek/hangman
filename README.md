@@ -37,6 +37,6 @@ i oczekiwaniu na gracza
 * master - główny branch, rozwijany przez pull request tylko z dev
 * dev - branch deweloperski pull request z feature branch lub fix_branch
 po code rewiev
-* feature_nazwa_funcjonalności - branch żyje tylko rozwojowo, po zakończeniu prac usuwanu
+* feature_nazwa_funcjonalności - branch żyje tylko rozwojowo, po zakończeniu prac usuwany
 * fix_nazwa_buga - po naprawie i code rewiev branch usuwany
 
