@@ -30,9 +30,9 @@ def handle_client(client_sock, game_id: int, client_number: int) -> None:
             if game_id in GAMES:
                 game = GAMES[game_id]
                 if client_number == 0:
-                    game.client_2_sock_ssl.send(msg.encode(FORMAT))
+                    game.client_2_sock.send(msg.encode(FORMAT))
                 else:
-                    game.client_1_sock_ssl.send(msg.encode(FORMAT))
+                    game.client_1_sock.send(msg.encode(FORMAT))
         except (EOFError, ConnectionError):
             # TODO Client switching
             """
