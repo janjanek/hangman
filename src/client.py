@@ -9,8 +9,7 @@ BUF_SIZE = 1024
 
 
 def handle_disconnect(client_sock) -> None:
-    # TODO handle disconnecting
-    raise NotImplementedError
+    client_sock.close()
 
 
 def handle_input(client_sock) -> None:
@@ -22,17 +21,23 @@ def handle_input(client_sock) -> None:
         msg = input().encode(FORMAT)
         # TODO implement protocol logic
         # TODO (optionally) implement gui
+        msg = input()
         if msg == "end":
+            client_sock.send("end".encode(FORMAT))
             handle_disconnect(client_sock)
+            break
+
         try:
-            client_sock.send(msg)
+            client_sock.send(msg.encode(FORMAT))
         except (BrokenPipeError, ConnectionError):
             break
 
 
 if __name__ == "__main__":
-    client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
     client_sock.connect((SERVER, PORT))
+
     # TODO implement logs
     print(f"CONNECTED TO {SERVER}:{PORT}")
 
