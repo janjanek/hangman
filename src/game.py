@@ -2,7 +2,7 @@ from random import choice
 
 
 class Game:
-    def __init__(self, client_1_sock, client_2_sock, format):
+    def __init__(self, client_1_sock, client_2_sock, format, buff_size):
         """
         :param client_1_sock:
         :param client_2_sock:
@@ -21,6 +21,8 @@ class Game:
         self.lives_client_2 = None
         self.category = self._rand_category()
         self.format = format
+        self.buff_size = buff_size
+        self.send_result = 0
 
     @staticmethod
     def _rand_category() -> str:
@@ -99,32 +101,44 @@ class Game:
         else:
             self.client_1_sock.send(msg.encode(self.format))
 
-    def setWords(self, client_number: int):
+    def set_words(self, client_number: int, msg: str) -> None:
         if client_number == 0:
-            self.word_client_1 = self.client_1_sock.recv(1024).decode(self.format)
+            self.word_client_1 = msg
             self.word_client_1_answer = '_' * len(self.word_client_1)
         else:
-            self.word_client_2 = self.client_2_sock.recv(1024).decode(self.format)
+            self.word_client_2 = msg
             self.word_client_2_answer = '_' * len(self.word_client_2)
 
-    def setLives(self, client_number: int, lives: int):
+    def set_lives(self, client_number: int, lives: int):
         if client_number == 0:
             self.lives_client_1 = lives
         else:
             self.lives_client_2 = lives
 
     def playing(self, client_number: int, msg: str):
-        if(client_number == 0):
+        # take first latter from msg
+        try:
+            msg = msg[0]
+        except IndexError:
+            # TODO Save information about system to logs
+            err_msg = "You haven't put any letter"
+            if client_number == 0:
+                self.client_2_sock.send(err_msg.encode(self.format))
+            else:
+                self.client_1_sock.send(err_msg.encode(self.format))
+
+        if client_number == 0:
             guess = msg
             # msg must be equal to 1 letter!!!
             index = 0
             damage = True
             for character in self.word_client_2:
                 if (character == guess):
-                    self.word_client_1_answer = self.word_client_1_answer[:index] + character + self.word_client_1_answer[index + 1:]
+                    self.word_client_1_answer = self.word_client_1_answer[
+                                                :index] + character + self.word_client_1_answer[index + 1:]
                     damage = False
                 index = index + 1
-            if (damage):
+            if damage:
                 self.lives_client_1 = self.lives_client_1 - 1
         else:
             guess = msg
@@ -133,17 +147,21 @@ class Game:
             damage = True
             for character in self.word_client_1:
                 if (character == guess):
-                    self.word_client_2_answer = self.word_client_2_answer[:index] + character + self.word_client_2_answer[index + 1:]
+                    self.word_client_2_answer = self.word_client_2_answer[
+                                                :index] + character + self.word_client_2_answer[index + 1:]
                     damage = False
                 index = index + 1
             if (damage):
                 self.lives_client_2 = self.lives_client_2 - 1
 
-    def score(self):
+    def score(self) -> bool:
         msg = "You won the game!"
         if self.lives_client_1 <= 0:
             self.client_2_sock.send(msg.encode(self.format))
+            return True
 
         if self.lives_client_2 <= 0:
             self.client_1_sock.send(msg.encode(self.format))
+            return True
 
+        return False
