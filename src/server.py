@@ -1,9 +1,5 @@
 import socket
 import threading
-# TODO implement tsl connection
-# import ssl
-
-
 from src.game import Game
 
 SERVER = "127.0.0.1"
@@ -11,58 +7,64 @@ PORT = 5001
 GAMES = {}
 FORMAT = 'utf-8'
 BUF_SIZE = 1024
-CLIENTS_COUNTER = 1
 
-
-def handle_disconnect(client_sock, game_id: int) -> None:
-    global CLIENTS_COUNTER
-    CLIENTS_COUNTER -= 1
-    if game_id in GAMES:
-        game = GAMES[game_id]
-        print(f"CLIENT: {game.client_1_sock.fileno()} DISCONNECTED")
-        print(f"CLIENT: {game.client_2_sock.fileno()} DISCONNECTED")
-        game.client_1_sock.close()
-        game.client_2_sock.close()
-        del GAMES[game_id]
-    else:
-        print(f"CLIENT: {client_sock.fileno()} DISCONNECTED")
-        client_sock.close()
 
 def handle_disconnect(client_sock) -> None:
     # TODO handle disconnecting
     raise NotImplementedError
 
-def is_not_connected(client_sock, game_id: int) -> bool:
-    client_sock.send("WAITING FOR PLAYER...\n".encode(FORMAT))
-    client_sock.send("TO DISCONNECT GAME TYPE 'end'\n".encode(FORMAT))
-    while game_id not in GAMES:
-        msg = client_sock.recv(BUF_SIZE).decode(FORMAT)
-        if msg == "end":
-            handle_disconnect(client_sock, -1)
-            return True
-    return False
 
-
-def handle_client(client_sock: socket.socket, game_id: int, client_number: int) -> None:
+def handle_client(client_sock, game_id: int, client_number: int) -> None:
     """
     :param client_sock:
     :param game_id:
     :param client_number:
     :return:
     """
-    """before game logic"""
-    if is_not_connected(client_sock, game_id):
-        return None
-
-    game = GAMES[game_id]
-    client_sock.send("GAME HAS BEEN STARTED\n".encode(FORMAT))
-    client_sock.send(f"CATEGORY {game.category}\n".encode(FORMAT))
-
     while True:
         try:
             msg = client_sock.recv(BUF_SIZE).decode(FORMAT)
-            game = GAMES[game_id]
-            game.logic(client_number, msg)
+            # TODO implement protocol logic
+            print(msg, client_sock.fileno())
+            # TODO handle disconnect
+            if game_id in GAMES:
+                game = GAMES[game_id]
+                if client_number == 0:
+                    game.client_2_sock.send(msg.encode(FORMAT))
+                else:
+                    game.client_1_sock.send(msg.encode(FORMAT))
+            #STARTING GAME
+            if game_id in GAMES:
+                game = GAMES[game_id]
+                if client_number == 0:
+                    if msg == 'start':
+                        game.startGame(0,msg)
+                else:
+                    if msg == 'start':
+                        game.startGame(1,msg)
+            #SETTING WORDS
+            if game_id in GAMES:
+                game = GAMES[game_id]
+                if client_number == 0:
+                    game.setWords(0)
+                else:
+                    game.setWords(1)
+            #SETTING LIVES
+            if game_id in GAMES:
+                game = GAMES[game_id]
+                if client_number == 0:
+                    game.setLives(0)
+            #PLAYING
+            if game_id in GAMES:
+                game = GAMES[game_id]
+                if client_number == 0:
+                    game.playing(0)
+                else:
+                    game.playing(1)
+
+
+
+        #     tutaj odbior, wiadomosci, mam dana gre w ktorej sa gracze oraz numer player1 player2
         except (EOFError, ConnectionError):
             # TODO Client switching
             """
@@ -72,15 +74,15 @@ def handle_client(client_sock: socket.socket, game_id: int, client_number: int) 
             client about disconnection of first client
             and ask him about restarting the game.
             """
-            handle_disconnect(client_sock, game_id)
+            handle_disconnect(client_sock)
+            del GAMES[game_id]
             break
 
 
 if __name__ == "__main__":
     clients_counter = 1
     game_id = 0
-
-    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.bind((SERVER, PORT))
     server_sock.listen(5)
 
@@ -91,12 +93,12 @@ if __name__ == "__main__":
         client_sock, addr = server_sock.accept()
 
         print(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
-        # TODO every print should be saved in logs.txt file
+        # TODO implement logs
 
-        if not CLIENTS_COUNTER % 2:
+        if not clients_counter % 2:
             client_2 = client_sock
             client_number = 1
-            GAMES[game_id // 2] = Game(client_1, client_2, FORMAT)
+            GAMES[game_id//2] = Game(client_1, client_2, FORMAT)
         else:
             client_1 = client_sock
             client_number = 0
@@ -108,6 +110,6 @@ if __name__ == "__main__":
                                          daemon=True)
         client_thread.start()
 
-        CLIENTS_COUNTER += 1
+        clients_counter += 1
         game_id += 1
 

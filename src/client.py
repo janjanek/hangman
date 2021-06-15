@@ -18,7 +18,7 @@ def handle_input(client_sock) -> None:
     :return:
     """
     while True:
-        msg = input().encode(FORMAT)
+        # msg = input().encode(FORMAT)
         # TODO implement protocol logic
         # TODO (optionally) implement gui
         msg = input()
@@ -31,7 +31,6 @@ def handle_input(client_sock) -> None:
             client_sock.send(msg.encode(FORMAT))
         except (BrokenPipeError, ConnectionError):
             break
-
 
 if __name__ == "__main__":
 
