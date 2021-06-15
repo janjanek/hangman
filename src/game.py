@@ -2,7 +2,7 @@ from random import choice
 
 
 class Game:
-    def __init__(self, client_1_sock, client_2_sock, format):
+    def __init__(self, client_1_sock, client_2_sock, format, buff_size):
         """
         :param client_1_sock:
         :param client_2_sock:
@@ -21,6 +21,8 @@ class Game:
         self.lives_client_2 = 1
         self.category = self._rand_category()
         self.format = format
+        self.buff_size = buff_size
+        self.send_result = 0
 
     @staticmethod
     def _rand_category() -> str:
@@ -184,11 +186,14 @@ class Game:
                     if (damage):
                         self.lives_client_2 = self.lives_client_2 - 1
 
-    def score(self):
+    def score(self) -> bool:
         msg = "You won the game!"
         if self.lives_client_1 <= 0:
             self.client_2_sock.send(msg.encode(self.format))
+            return True
 
         if self.lives_client_2 <= 0:
             self.client_1_sock.send(msg.encode(self.format))
+            return True
 
+        return False
