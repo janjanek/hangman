@@ -1,5 +1,6 @@
 import socket
 import threading
+import ssl
 
 SERVER = "127.0.0.1"
 PORT = 5001
