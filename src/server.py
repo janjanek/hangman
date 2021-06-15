@@ -1,7 +1,7 @@
 import socket
 import threading
 import ssl
-
+import datetime
 
 from src.game import Game
 
@@ -123,6 +123,12 @@ def handle_client(client_sock, game_id: int, client_number: int) -> None:
             handle_disconnect(client_sock, game_id)
             break
 
+def write_to_logs(event):
+    file_logs = open("logs.txt", "a")
+    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    file_logs.write(f"{time}: {event} \n")
+    file_logs.close()
+
 
 if __name__ == "__main__":
     clients_counter = 1
@@ -135,14 +141,17 @@ if __name__ == "__main__":
     server_sock.listen(5)
 
     print(f"SERVER STARTED ON {SERVER}:{PORT}")
+    write_to_logs(f"SERVER STARTED ON {SERVER}:{PORT}")
     client_1 = None
     client_number = 0
     while True:
         client, addr = server_sock.accept()
 
         print(f"CLIENT: {client.fileno()} ADDR: {addr} CONNECTED")
+        write_to_logs(f"CLIENT: {client.fileno()} ADDR: {addr} CONNECTED")
         # TODO every print should be saved in logs.txt file
         print(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
+        write_to_logs(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
         # TODO implement logs
 
         ssl_client = ssl.wrap_socket(client,
