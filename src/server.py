@@ -56,7 +56,7 @@ def handle_client(client_sock, game_id: int, client_number: int) -> None:
     first_msg = True
     while True:
         try:
-            msg = client_sock.recv(BUF_SIZE).decode(FORMAT)
+            msg = client_sock.recv(BUFF_SIZE).decode(FORMAT)
             # TODO implement protocol logic
             print(msg, client_sock.fileno())
             # TODO handle disconnect
@@ -154,7 +154,6 @@ if __name__ == "__main__":
         client_sock = ssl_client
 
         if not CLIENTS_COUNTER % 2:
-        if not clients_counter % 2:
             client_2 = client_sock
             client_number = 1
             GAMES[game_id//2] = Game(client_1, client_2, FORMAT)
