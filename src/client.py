@@ -11,6 +11,11 @@ BUF_SIZE = 1024
 
 
 def handle_disconnect(client_sock) -> None:
+    """
+    :param client_sock:
+    :return:
+    function handling disconnection
+    """
     client_sock.close()
 
 
@@ -18,6 +23,8 @@ def handle_input(client_sock) -> None:
     """
     :param client_sock:
     :return:
+    function is responsible for sending
+    data to server and handling input from client
     """
     while True:
         msg = input()
