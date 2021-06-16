@@ -1,5 +1,6 @@
 import socket
 import threading
+import ssl
 
 SERVER = "127.0.0.1"
 PORT = 5001
@@ -18,7 +19,6 @@ def handle_input(client_sock) -> None:
     :return:
     """
     while True:
-        msg = input().encode(FORMAT)
         # TODO implement protocol logic
         # TODO (optionally) implement gui
         msg = input()
@@ -32,11 +32,19 @@ def handle_input(client_sock) -> None:
         except (BrokenPipeError, ConnectionError):
             break
 
-
 if __name__ == "__main__":
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
 
-    client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    """ssl client sock"""
+    client_sock = ssl.wrap_socket(client,
+                                  cert_reqs=ssl.CERT_REQUIRED,
+                                  ssl_version=ssl.PROTOCOL_TLSv1_2,
+                                  ca_certs="client_utils/trusted_certs.crt")
+
     client_sock.connect((SERVER, PORT))
+
+    if not client_sock.getpeercert():
+        raise Exception("Invalid SSL cert")
 
     # TODO implement logs
     print(f"CONNECTED TO {SERVER}:{PORT}")

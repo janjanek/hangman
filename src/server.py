@@ -1,8 +1,7 @@
 import socket
 import threading
-# TODO implement tsl connection
-# import ssl
-
+import ssl
+import datetime
 
 from src.game import Game
 
@@ -10,7 +9,7 @@ SERVER = "127.0.0.1"
 PORT = 5001
 GAMES = {}
 FORMAT = 'utf-8'
-BUF_SIZE = 1024
+BUFF_SIZE = 1024
 CLIENTS_COUNTER = 1
 
 
@@ -34,23 +33,19 @@ def handle_disconnect(client_sock) -> None:
 
 def is_not_connected(client_sock, game_id: int) -> bool:
     client_sock.send("WAITING FOR PLAYER...\n".encode(FORMAT))
-    client_sock.send("TO DISCONNECT GAME TYPE 'end'\n".encode(FORMAT))
+    # client_sock.send("TO DISCONNECT GAME TYPE 'end'\n".encode(FORMAT))
     while game_id not in GAMES:
-        msg = client_sock.recv(BUF_SIZE).decode(FORMAT)
-        if msg == "end":
-            handle_disconnect(client_sock, -1)
-            return True
+        pass
     return False
 
-
-def handle_client(client_sock: socket.socket, game_id: int, client_number: int) -> None:
+def handle_client(client_sock, game_id: int, client_number: int) -> None:
     """
     :param client_sock:
     :param game_id:
     :param client_number:
     :return:
     """
-    """before game logic"""
+    """before game has been started"""
     if is_not_connected(client_sock, game_id):
         return None
 
@@ -58,11 +53,38 @@ def handle_client(client_sock: socket.socket, game_id: int, client_number: int) 
     client_sock.send("GAME HAS BEEN STARTED\n".encode(FORMAT))
     client_sock.send(f"CATEGORY {game.category}\n".encode(FORMAT))
 
+    first_msg = True
     while True:
         try:
-            msg = client_sock.recv(BUF_SIZE).decode(FORMAT)
-            game = GAMES[game_id]
-            game.logic(client_number, msg)
+            msg = client_sock.recv(BUFF_SIZE).decode(FORMAT)
+            # TODO implement protocol logic
+            print(msg, client_sock.fileno())
+            # TODO handle disconnect
+            if game_id in GAMES:
+                game = GAMES[game_id]
+            #     if client_number == 0:
+            #         game.client_2_sock.send(msg.encode(FORMAT))
+            #     else:
+            #         game.client_1_sock.send(msg.encode(FORMAT))
+
+            """CLIENTS CHAT ABOVE(DELETED)"""
+
+            print(msg)
+            if not first_msg:
+                # TODO Here should be playing logic with sockets
+                if game_id in GAMES:
+                    game = GAMES[game_id]
+                    game.playing_hangman(client_number, msg)
+
+                """if somebody won"""
+                if game.score():
+                    break
+            else:
+                first_msg = False
+                if game_id in GAMES:
+                    game = GAMES[game_id]
+                    game.set_words(client_number, msg)
+                    game.set_lives(4)
         except (EOFError, ConnectionError):
             # TODO Client switching
             """
@@ -75,28 +97,52 @@ def handle_client(client_sock: socket.socket, game_id: int, client_number: int) 
             handle_disconnect(client_sock, game_id)
             break
 
+def write_to_logs(event):
+    file_logs = open("logs.txt", "a")
+    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    file_logs.write(f"{time}: {event} \n")
+    file_logs.close()
+
 
 if __name__ == "__main__":
     clients_counter = 1
     game_id = 0
 
-    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    server_sock = socket.socket()
+    server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.bind((SERVER, PORT))
     server_sock.listen(5)
 
     print(f"SERVER STARTED ON {SERVER}:{PORT}")
+    write_to_logs(f"SERVER STARTED ON {SERVER}:{PORT}")
     client_1 = None
     client_number = 0
     while True:
-        client_sock, addr = server_sock.accept()
+        client, addr = server_sock.accept()
 
-        print(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
+        print(f"CLIENT: {client.fileno()} ADDR: {addr} CONNECTED")
+        write_to_logs(f"CLIENT: {client.fileno()} ADDR: {addr} CONNECTED")
         # TODO every print should be saved in logs.txt file
+        # print(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
+        # write_to_logs(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
+        """Log didnt work"""
+        # TODO implement logs
 
-        if not CLIENTS_COUNTER % 2:
+        ssl_client = ssl.wrap_socket(client,
+                                     server_side=True,
+                                     certfile="server_utils/server.crt",
+                                     keyfile="server_utils/server.key",
+                                     ssl_version=ssl.PROTOCOL_TLSv1_2)
+
+        client_sock = ssl_client
+
+        """Fix CLIENTS_COUTNER"""
+        # if not CLIENTS_COUNTER % 2:
+        if not clients_counter % 2:
             client_2 = client_sock
             client_number = 1
-            GAMES[game_id // 2] = Game(client_1, client_2, FORMAT)
+            GAMES[game_id // 2] = Game(client_1, client_2, FORMAT, BUFF_SIZE)
         else:
             client_1 = client_sock
             client_number = 0
@@ -108,6 +154,6 @@ if __name__ == "__main__":
                                          daemon=True)
         client_thread.start()
 
-        CLIENTS_COUNTER += 1
+        clients_counter += 1
         game_id += 1
 
