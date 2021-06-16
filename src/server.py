@@ -62,55 +62,29 @@ def handle_client(client_sock, game_id: int, client_number: int) -> None:
             # TODO handle disconnect
             if game_id in GAMES:
                 game = GAMES[game_id]
-                if client_number == 0:
-                    game.client_2_sock.send(msg.encode(FORMAT))
-                else:
-                    game.client_1_sock.send(msg.encode(FORMAT))
-            #STARTING GAME
-            if game_id in GAMES:
-                game = GAMES[game_id]
-                if client_number == 0:
-                    if msg == 'start':
-                        game.startGame(0,msg)
-                else:
-                    if msg == 'start':
-                        game.startGame(1,msg)
-            #SETTING WORDS
-            if game_id in GAMES:
-                game = GAMES[game_id]
-                if client_number == 0:
-                    game.setWords(0)
-                else:
-                    game.setWords(1)
-            #SETTING LIVES
-            if game_id in GAMES:
-                game = GAMES[game_id]
-                if client_number == 0:
-                    game.setLives(0)
-            #PLAYING
-            if game_id in GAMES:
-                game = GAMES[game_id]
-                if client_number == 0:
-                    game.playing(0)
-                else:
-                    game.playing(1)
+            #     if client_number == 0:
+            #         game.client_2_sock.send(msg.encode(FORMAT))
+            #     else:
+            #         game.client_1_sock.send(msg.encode(FORMAT))
 
+            """CLIENTS CHAT ABOVE(DELETED)"""
 
-
-        #     tutaj odbior, wiadomosci, mam dana gre w ktorej sa gracze oraz numer player1 player2
-            msg = client_sock.recv(BUFF_SIZE).decode(FORMAT)
             print(msg)
             if not first_msg:
                 # TODO Here should be playing logic with sockets
-                game.playing(client_number, msg)
+                if game_id in GAMES:
+                    game = GAMES[game_id]
+                    game.playing_hangman(client_number, msg)
 
                 """if somebody won"""
                 if game.score():
                     break
             else:
                 first_msg = False
-                game.set_words(client_number, msg)
-                game.set_lives(client_number, 4)
+                if game_id in GAMES:
+                    game = GAMES[game_id]
+                    game.set_words(client_number, msg)
+                    game.set_lives(4)
         except (EOFError, ConnectionError):
             # TODO Client switching
             """
@@ -150,22 +124,24 @@ if __name__ == "__main__":
         print(f"CLIENT: {client.fileno()} ADDR: {addr} CONNECTED")
         write_to_logs(f"CLIENT: {client.fileno()} ADDR: {addr} CONNECTED")
         # TODO every print should be saved in logs.txt file
-        print(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
-        write_to_logs(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
+        # print(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
+        # write_to_logs(f"CLIENT: {client_sock.fileno()} ADDR: {addr} CONNECTED")
+        """Log didnt work"""
         # TODO implement logs
 
         ssl_client = ssl.wrap_socket(client,
                                      server_side=True,
-                                     certfile="src/server_utils/server.crt",
-                                     keyfile="src/server_utils/server.key",
+                                     certfile="server_utils/server.crt",
+                                     keyfile="server_utils/server.key",
                                      ssl_version=ssl.PROTOCOL_TLSv1_2)
 
         client_sock = ssl_client
 
-        if not CLIENTS_COUNTER % 2:
+        """Fix CLIENTS_COUTNER"""
+        # if not CLIENTS_COUNTER % 2:
+        if not clients_counter % 2:
             client_2 = client_sock
             client_number = 1
-            GAMES[game_id//2] = Game(client_1, client_2, FORMAT)
             GAMES[game_id // 2] = Game(client_1, client_2, FORMAT, BUFF_SIZE)
         else:
             client_1 = client_sock

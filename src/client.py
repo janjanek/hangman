@@ -39,7 +39,7 @@ if __name__ == "__main__":
     client_sock = ssl.wrap_socket(client,
                                   cert_reqs=ssl.CERT_REQUIRED,
                                   ssl_version=ssl.PROTOCOL_TLSv1_2,
-                                  ca_certs="src/client_utils/trusted_certs.crt")
+                                  ca_certs="client_utils/trusted_certs.crt")
 
     client_sock.connect((SERVER, PORT))
 
