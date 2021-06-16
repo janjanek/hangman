@@ -2,7 +2,7 @@ from random import choice
 
 
 class Game:
-    def __init__(self, client_1_sock, client_2_sock, format, buff_size):
+    def __init__(self, client_1_sock, client_2_sock, format, buff_size, lock):
         """
         :param client_1_sock:
         :param client_2_sock:
@@ -23,6 +23,7 @@ class Game:
         self.format = format
         self.buff_size = buff_size
         self.send_result = 0
+        self.lock = lock
 
     @staticmethod
     def _rand_category() -> str:
@@ -95,8 +96,6 @@ class Game:
         ]
         return choice(categories)
 
-
-
     def set_words(self, client_number: int, msg: str):
         if client_number == 0:
             self.word_client_1 = msg
@@ -104,7 +103,6 @@ class Game:
         else:
             self.word_client_2 = msg
             self.word_client_2_answer = '_' * len(self.word_client_2)
-
 
     def set_lives(self, lives: int):
             self.lives_client_1 = lives
