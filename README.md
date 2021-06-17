@@ -47,16 +47,19 @@ po code rewiev
 	* Kolejną zmianą względem innych produkcji jest losowanie kategorii wpisywanego hasła. Dzięki temu użytkownik może szybciej wymyślić hasło, a także wprowadza to możliwe nowe taktyki.
 
 2. Jakie są wymagania sprzętowe i programowe Waszego produktu?
+
 	Wymagania sprzętowe:
-		* komputer,
-		* klawiatura,
-		* monitor,
-		* połączenie z internetem.
+	* komputer,
+	* klawiatura,
+	* monitor,
+	* połączenie z internetem.
+		
 	Wymagania programowe:
-		* Python 3.7 lub wyższa wersja,
-		* System operacyjny: Ubuntu, Windows, macOS.
+	* Python 3.7 lub wyższa wersja,
+	* System operacyjny: Ubuntu, Windows, macOS.
 		
 3. Jakich bibliotek użyliście, czy stworzyliście własne?
+
 	Wykorzystane biblioteki to: 
 	* socket	- wykorzystana do tworzenia połączeń na niskim poziomie programistycznym,
 	* sys		- wykorzystana do zdalnego zamknięcia programu klienta (w późniejszym czasie możliwość rozbudowania aplikacji o moderację w czasie rzeczywitym), 
