@@ -50,6 +50,10 @@ def handle_client(client_sock, game_id: int, client_number: int) -> None:
     :return:
     """
 
+    first_msg = client_sock.recv(BUFF_SIZE).decode(FORMAT)
+    if first_msg != "start":
+        handle_disconnect(client_sock)
+
     while game_id not in GAMES:
         client_sock.send("WAITING FOR PLAYER...\n".encode(FORMAT))
         # client_sock.send("TO REFRESH TYPE refresh\n".encode(FORMAT))
@@ -64,7 +68,7 @@ def handle_client(client_sock, game_id: int, client_number: int) -> None:
     while game_id in GAMES:
         try:
             msg = client_sock.recv(BUFF_SIZE).decode(FORMAT)
-            print(msg)
+            # print(msg)
 
             if start:
                 game.set_words(client_number, msg)
@@ -88,7 +92,8 @@ def handle_client(client_sock, game_id: int, client_number: int) -> None:
 if __name__ == "__main__":
     game_id = 0
 
-    server_sock = socket.socket()
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # server_sock = socket.socket()
     server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.bind((SERVER, PORT))
