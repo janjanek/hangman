@@ -31,6 +31,7 @@ serwer wysyła informację o rezultacie gry.
 
 Zestaw komend <br/>
 end - koniec gry, serwer wysyła komendę o końcu gry do klientów
+start - komanda którą otrzymuje serwer od użytkownika po czym następuje flow gry opisane w punktach 1-14
 
 ## Git workflow
 * master - główny branch, rozwijany przez pull request tylko z dev
