@@ -24,7 +24,7 @@ o wylosowanej kategorii i który gracz zaczyna
 10. Klient wysyła literę
 11. Serwer sprawdza czy jest ona w haśle przeciwnika
 12. Serwer wysyła hasło z uzupełnioną literą
-13. Kroki 14-16 powtarzają się do
+13. Kroki 9-12 powtarzają się do
 póki ktoś nie odgadnie hasła
 14. W przypdaku odgadnięcia hasła
 serwer wysyła informację o rezultacie gry.
