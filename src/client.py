@@ -26,13 +26,12 @@ def handle_input(client_sock) -> None:
     function is responsible for sending
     data to server and handling input from client
     """
+    client_sock.send("start".encode(FORMAT))
     while True:
         msg = input()
-        if msg == "end":
-            client_sock.send("end".encode(FORMAT))
-            handle_disconnect(client_sock)
-            break
-
+        if len(msg) > BUF_SIZE:
+            print("Too long message")
+            continue
         try:
             client_sock.send(msg.encode(FORMAT))
         except (BrokenPipeError, ConnectionError):
@@ -53,7 +52,6 @@ if __name__ == "__main__":
     if not client_sock.getpeercert():
         raise Exception("Invalid SSL cert")
 
-    # TODO implement logs
     print(f"CONNECTED TO {SERVER}:{PORT}")
 
     thread = threading.Thread(target=handle_input, args=[client_sock],
