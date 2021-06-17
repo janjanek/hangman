@@ -2,7 +2,7 @@ from random import choice
 
 
 class Game:
-    def __init__(self, client_1_sock, client_2_sock, format, buff_size):
+    def __init__(self, client_1_sock, client_2_sock, format, buff_size, lock):
         """
         :param client_1_sock:
         :param client_2_sock:
@@ -23,6 +23,7 @@ class Game:
         self.format = format
         self.buff_size = buff_size
         self.send_result = 0
+        self.lock = lock
 
     @staticmethod
     def _rand_category() -> str:
@@ -95,9 +96,8 @@ class Game:
         ]
         return choice(categories)
 
-
-
-    def set_words(self, client_number: int, msg: str):
+    def set_words(self, client_number: int, rec_msg: str):
+        msg = rec_msg.lower()
         if client_number == 0:
             self.word_client_1 = msg
             self.word_client_1_answer = '_' * len(self.word_client_1)
@@ -105,13 +105,13 @@ class Game:
             self.word_client_2 = msg
             self.word_client_2_answer = '_' * len(self.word_client_2)
 
-
     def set_lives(self, lives: int):
             self.lives_client_1 = lives
             self.lives_client_2 = lives
 
-    def playing_hangman(self, client_number: int, msg: str):
+    def playing_hangman(self, client_number: int, rec_msg: str):
         try:
+            msg = rec_msg.lower()
             msg = msg[0]
         except IndexError:
             # TODO Save information about system to logs
