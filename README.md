@@ -42,7 +42,7 @@ po code rewiev
 ## Wnioski końcowe
 
 1. Co wyróżnia Wasze rozwiązanie w porównaniu do podobnych tego typu rozwiązań?
-	* Gra za pomocą zastosowania 4 żyć jest bardziej dynamiczna. Dodatkowo, kiedy przeciwnik oddali się od komputera, użytkownik nie musi oczekiwać na jego powrót.
+	* Gra za pomocą zastosowania 4 żyć jest bardziej dynamiczna. Co więcej, kiedy przeciwnik oddali się od komputera, użytkownik nie musi oczekiwać na jego powrót.
 	* Na dynamikę rozgrywki wpływa także automatyczne parowanie użytkowników i tworzenie pokojów.
 	* Kolejną zmianą względem innych produkcji jest losowanie kategorii wpisywanego hasła. Dzięki temu użytkownik może szybciej wymyślić hasło, a także wprowadza to możliwe nowe taktyki.
 
@@ -74,6 +74,6 @@ po code rewiev
 	* Czytelnego wyświetlania zgadywanych haseł.
 	
 5. Na jakie problemy napotkaliście i jak zostały rozwiązane?
-	* Największym problemem jaki spotkaliśmy było stworzenie możliwości połączenia się wielu osób na serwer (a nie tylko dwóch), oraz łączenie ich dynamicznie w pary, w celu zwiększenia dynamiki gry. Problem ten został rozwiązany poprzez użycie wielowątkowości serwera. Każdy użytkownik otrzymuje swój wątek. 
+	* Największym wyzwaniem, jakie spotkaliśmy, było stworzenie możliwości połączenia się wielu osób na serwer (a nie tylko dwóch), oraz łączenie ich dynamicznie w pary, w celu zwiększenia dynamiki gry. Problem ten został rozwiązany poprzez użycie wielowątkowości serwera. Każdy użytkownik otrzymuje swój wątek.
 
 
