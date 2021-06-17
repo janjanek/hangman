@@ -39,3 +39,38 @@ po code rewiev
 * feature_nazwa_funcjonalności - branch żyje tylko rozwojowo, po zakończeniu prac usuwany****************
 * fix_nazwa_buga - po naprawie i code rewiev branch usuwany
 
+## Wnioski końcowe
+
+1. Co wyróżnia Wasze rozwiązanie w porównaniu do podobnych tego typu rozwiązań?
+	* Gra za pomocą zastosowania 4 żyć jest bardziej dynamiczna. Dodatkowo, kiedy przeciwnik oddali się od komputera, użytkownik nie musi oczekiwać na jego powrót.
+	* Na dynamikę rozgrywki wpływa także automatyczne parowanie użytkowników i tworzenie pokojów.
+	* Kolejną zmianą względem innych produkcji jest losowanie kategorii wpisywanego hasła. Dzięki temu użytkownik może szybciej wymyślić hasło, a także wprowadza to możliwe nowe taktyki.
+
+2. Jakie są wymagania sprzętowe i programowe Waszego produktu?
+	Wymagania sprzętowe:
+		* komputer,
+		* klawiatura,
+		* monitor,
+		* połączenie z internetem.
+	Wymagania programowe:
+		* Python 3.7 lub wyższa wersja,
+		* System operacyjny: Ubuntu, Windows, macOS.
+		
+3. Jakich bibliotek użyliście, czy stworzyliście własne?
+	Wykorzystane biblioteki to: 
+	* socket	- wykorzystana do tworzenia połączeń na niskim poziomie programistycznym,
+	* sys		- wykorzystana do zdalnego zamknięcia programu klienta (w późniejszym czasie możliwość rozbudowania aplikacji o moderację w czasie rzeczywitym), 
+	* threading	- wykorzystana do tworzenie wątków odpowiedzialnych za obsługę dużej liczby graczy,
+	* ssl		- wykorzystana do bezpiecznego nawiązywania połączeń i szyfrowania ich,
+	* random	- wykorzystana do wybierania pseudolosowej kategorii,
+	* datatime	- wykorzystana do prawidłowej obłsługi logów,
+	* time		- wykorzystana do obsługi przerw czasowych w programie.
+
+4. Z czego jesteście najbardziej dumni, zadowoleni w Waszym projekcie?
+	* Prędkości działania programu 
+	* Czytelnego wyświetlania zgadywanych haseł.
+	
+5. Na jakie problemy napotkaliście i jak zostały rozwiązane?
+	* Największym problemem jaki spotkaliśmy było stworzenie możliwości połączenia się wielu osób na serwer (a nie tylko dwóch), oraz łączenie ich dynamicznie w pary, w celu zwiększenia dynamiki gry. Problem ten został rozwiązany poprzez użycie wielowątkowości serwera. Każdy użytkownik otrzymuje swój wątek. 
+
+
