@@ -96,7 +96,8 @@ class Game:
         ]
         return choice(categories)
 
-    def set_words(self, client_number: int, msg: str):
+    def set_words(self, client_number: int, rec_msg: str):
+        msg = rec_msg.lower()
         if client_number == 0:
             self.word_client_1 = msg
             self.word_client_1_answer = '_' * len(self.word_client_1)
@@ -108,8 +109,9 @@ class Game:
             self.lives_client_1 = lives
             self.lives_client_2 = lives
 
-    def playing_hangman(self, client_number: int, msg: str):
+    def playing_hangman(self, client_number: int, rec_msg: str):
         try:
+            msg = rec_msg.lower()
             msg = msg[0]
         except IndexError:
             # TODO Save information about system to logs
