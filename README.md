@@ -29,8 +29,8 @@ póki ktoś nie odgadnie hasła
 14. W przypdaku odgadnięcia hasła
 serwer wysyła informację o rezultacie gry.
 
-Zestaw komend
-end - koniec gry serwer wysyła komendę o końcu gry do klientów
+Zestaw komend <br/>
+end - koniec gry, serwer wysyła komendę o końcu gry do klientów
 
 ## Git workflow
 * master - główny branch, rozwijany przez pull request tylko z dev
