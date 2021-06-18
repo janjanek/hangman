@@ -46,6 +46,7 @@ po code rewiev
 	* Gra za pomocą zastosowania 4 żyć jest bardziej dynamiczna. Co więcej, kiedy przeciwnik oddali się od komputera, użytkownik nie musi oczekiwać na jego powrót.
 	* Na dynamikę rozgrywki wpływa także automatyczne parowanie użytkowników i tworzenie pokojów.
 	* Kolejną zmianą względem innych produkcji jest losowanie kategorii wpisywanego hasła. Dzięki temu użytkownik może szybciej wymyślić hasło, a także wprowadza to możliwe nowe taktyki.
+	* 
 
 2. Jakie są wymagania sprzętowe i programowe Waszego produktu?
 
@@ -73,8 +74,22 @@ po code rewiev
 4. Z czego jesteście najbardziej dumni, zadowoleni w Waszym projekcie?
 	* Prędkości działania programu 
 	* Czytelnego wyświetlania zgadywanych haseł.
+	* W teorii nieskończona ilość osób na serwerze (ograniczeniem jest fizyczny sprzęt, system operacyjny itd)
+	* Jako leader jestem dumny z dobrej współpracy i chęci do podziału obowiązków. Z dyspozycji członków zespołu do wspólnych spotkań pomiędzy sprintami.
+	* Z dobrego przygotowania członków w zakresie teorii potrzebnej do zaimplementowania przypadających im funckjonalności.
+	* Z dobrego workflow na githubie, pracy podzielonej na branche i sensowne commity.
+	* Ze stabilnego łączenia socketów, którym zajął się Łukasz.
+	* Z rozwiązania gry w wisielca, które działa szybko i nie jest pamięcio żerne.
 	
 5. Na jakie problemy napotkaliście i jak zostały rozwiązane?
 	* Największym wyzwaniem, jakie spotkaliśmy, było stworzenie możliwości połączenia się wielu osób na serwer (a nie tylko dwóch), oraz łączenie ich dynamicznie w pary, w celu zwiększenia dynamiki gry. Problem ten został rozwiązany poprzez użycie wielowątkowości serwera. Każdy użytkownik otrzymuje swój wątek.
+	* Kolejnym problemem okazało się spojenie gry w wisielca pomiędzy graczami, którzy działają na dwóch różnych wątkach. Problem ten udało się sprytnie ominąć zaimplementowaniem żyć, w rezultacie czego każdy gracz jest niezależny od drugiego, gra w swoim tempie. 
+
+
+6. Pomysły na dalszy rozwój
+	* Przyjazne dla użytkownika gui.
+	* Przeniesienie kategorii do pliku tekstowego, zezwolenie community na modyfikację kategorii.
+	* Łączenie na serwer poprzez przeglądarkę.
+	* Dodatkowe funkcjonalności na życzenie zleceniodawcy.
 
 
