@@ -46,7 +46,6 @@ po code rewiev
 	* Gra za pomocą zastosowania 4 żyć jest bardziej dynamiczna. Co więcej, kiedy przeciwnik oddali się od komputera, użytkownik nie musi oczekiwać na jego powrót.
 	* Na dynamikę rozgrywki wpływa także automatyczne parowanie użytkowników i tworzenie pokojów.
 	* Kolejną zmianą względem innych produkcji jest losowanie kategorii wpisywanego hasła. Dzięki temu użytkownik może szybciej wymyślić hasło, a także wprowadza to możliwe nowe taktyki.
-	* 
 
 2. Jakie są wymagania sprzętowe i programowe Waszego produktu?
 
